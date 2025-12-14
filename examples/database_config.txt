@@ -1,0 +1,47 @@
+// Основные параметры подключения
+dbport: 0b1010110111110;       // Порт базы данных 5566
+poolmin: 0b101;                // Минимум соединений в пуле 5
+poolmax: 0b11001;              // Максимум соединений в пуле 25
+querytimeout: 0b11110;         // Таймаут запросов 30 секунд
+
+// Настройки репликации
+replicacount: 0b11;            // Количество реплик 3
+replicatimeout: 0b1010;        // Таймаут репликации 10
+
+// Основная конфигурация базы данных
+database: table([
+    port = .(dbport).,
+    
+    pool = table([
+        minsize = .(poolmin).,
+        maxsize = .(poolmax).,
+        timeout = .(querytimeout).
+    ]),
+    
+    replication = table([
+        enabled = 0b1,
+        count = .(replicacount).,
+        synctimeout = .(replicatimeout).
+    ]),
+    
+    options = table([
+        readonly = 0b0,
+        cache = 0b1,
+        compression = 0b1,
+        encryption = 0b1
+    ])
+]);
+
+// Конфигурация мониторинга
+monitorinterval: 0b111100;     // Интервал мониторинга 60 секунд
+
+monitoring: table([
+    enabled = 0b1,
+    interval = .(monitorinterval).,
+    metrics = table([
+        cpu = 0b1,
+        memory = 0b1,
+        connections = 0b1,
+        queries = 0b1
+    ])
+]);
