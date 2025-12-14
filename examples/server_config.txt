@@ -1,0 +1,43 @@
+// Определение базовых констант
+port: 0b10000000;              // Порт 128
+maxconnections: 0b1111111111;  // Максимум соединений 1023
+timeout: 0b111100;             // Таймаут в секундах 60
+buffersize: 0b10000000000;     // Размер буфера 1024
+
+// Настройки SSL
+sslport: 0b111000011;          // SSL порт 451
+sslenabled: 0b1;               // SSL включен
+
+// Конфигурация основного сервера
+server: table([
+    listenport = .(port).,
+    sslport = .(sslport).,
+    maxclients = .(maxconnections).,
+    connectiontimeout = .(timeout).,
+    
+    // Вложенные настройки
+    network = table([
+        buffersize = .(buffersize).,
+        keepalive = 0b1,
+        nodelay = 0b1
+    ]),
+    
+    ssl = table([
+        enabled = .(sslenabled).,
+        protocol = 0b11
+    ]),
+    
+    logging = table([
+        level = 0b10,
+        maxfilesize = 0b1111101000
+    ])
+]);
+
+// Конфигурация кэширования
+cachesize: 0b100000000000;     // Размер кэша 2048
+
+cache: table([
+    enabled = 0b1,
+    size = .(cachesize).,
+    ttl = 0b1110001000
+]);
